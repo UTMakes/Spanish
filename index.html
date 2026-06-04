@@ -1,171 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lima Weather — Animated</title>
 <style>
-  @keyframes drift1{0%{transform:translateX(0)}100%{transform:translateX(-880px)}}
-  @keyframes drift2{0%{transform:translateX(300px)}100%{transform:translateX(-880px)}}
-  @keyframes drift3{0%{transform:translateX(500px)}100%{transform:translateX(-880px)}}
-  @keyframes sunpulse{0%,100%{r:50;opacity:0.92}50%{r:54;opacity:1}}
-  @keyframes sunray{0%,100%{opacity:0;transform:scale(0.8)}50%{opacity:0.18;transform:scale(1.3)}}
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+    background: #0b1a24;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  .card {
+    border-radius: 18px; overflow: hidden; width: 100%; max-width: 960px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06);
+    position: relative;
+  }
+
+  /* ── keyframes ── */
+  @keyframes drift1{0%{transform:translateX(0)}100%{transform:translateX(-960px)}}
+  @keyframes drift2{0%{transform:translateX(300px)}100%{transform:translateX(-960px)}}
+  @keyframes drift3{0%{transform:translateX(600px)}100%{transform:translateX(-960px)}}
+  @keyframes sunpulse{0%,100%{r:54;opacity:0.92}50%{r:58;opacity:1}}
+  @keyframes sunray{0%,100%{opacity:0;transform:scale(0.8)}50%{opacity:0.22;transform:scale(1.35)}}
   @keyframes windline1{0%{stroke-dashoffset:140;opacity:0}30%{opacity:0.75}100%{stroke-dashoffset:0;opacity:0}}
   @keyframes windline2{0%{stroke-dashoffset:100;opacity:0}30%{opacity:0.6}100%{stroke-dashoffset:0;opacity:0}}
-  @keyframes blink{0%,100%{opacity:0.7}50%{opacity:0.2}}
+  @keyframes blink{0%,100%{opacity:0.8}50%{opacity:0.15}}
   @keyframes popupin{0%{opacity:0;transform:translateY(22px) scale(0.93)}70%{transform:translateY(-4px) scale(1.02)}100%{opacity:1;transform:translateY(0) scale(1)}}
   @keyframes floatin{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
-  @keyframes birdflight{0%{transform:translate(0,0)}25%{transform:translate(160px,-18px)}50%{transform:translate(320px,8px)}75%{transform:translate(480px,-12px)}100%{transform:translate(680px,4px)}}
+  @keyframes birdflight{0%{transform:translate(0,0)}25%{transform:translate(220px,-22px)}50%{transform:translate(440px,10px)}75%{transform:translate(660px,-14px)}100%{transform:translate(960px,6px)}}
+  @keyframes birdflight2{0%{transform:translate(0,0)}30%{transform:translate(200px,14px)}60%{transform:translate(480px,-10px)}100%{transform:translate(960px,8px)}}
   @keyframes birdwing{0%,100%{d:path("M0 4 Q4 0 8 4 Q12 0 16 4")}50%{d:path("M0 2 Q4 6 8 2 Q12 6 16 2")}}
   @keyframes shimmer{0%,100%{opacity:0.55}50%{opacity:0.85}}
   @keyframes wavemove{0%{transform:translateX(0)}100%{transform:translateX(-120px)}}
-  @keyframes planeflight{0%{transform:translate(-60px,180px)}100%{transform:translate(760px,80px)}}
+  @keyframes planeflight{0%{transform:translate(-80px,200px)}100%{transform:translate(1060px,70px)}}
   @keyframes exhaustpuff{0%{opacity:0.6;transform:translateX(0)}100%{opacity:0;transform:translateX(-30px)}}
-  @keyframes raindrop{0%{transform:translateY(-10px);opacity:0}20%{opacity:0.6}100%{transform:translateY(60px);opacity:0}}
-  @keyframes cloudgrow{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-  @keyframes glow{0%,100%{opacity:0.15}50%{opacity:0.35}}
+  @keyframes raindrop{0%{transform:translateY(-10px);opacity:0}20%{opacity:0.6}100%{transform:translateY(70px);opacity:0}}
+  @keyframes cloudgrow{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  @keyframes glow{0%,100%{opacity:0.15}50%{opacity:0.38}}
   @keyframes fadeup{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
-  @keyframes horizon{0%{opacity:0}100%{opacity:1}}
-</style>
 
-<div style="border-radius:14px;overflow:hidden;width:100%;background:#a8d4ee;position:relative;">
-<svg width="100%" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+  /* NEW animations */
+  @keyframes shootingstar{
+    0%{transform:translate(0,0) rotate(-25deg);opacity:0}
+    8%{opacity:1}
+    100%{transform:translate(320px,140px) rotate(-25deg);opacity:0}
+  }
+  @keyframes twinkle{0%,100%{opacity:0.2}50%{opacity:0.9}}
+  @keyframes twinkle2{0%,100%{opacity:0.6}50%{opacity:0.1}}
+  @keyframes lighthouse{
+    0%,48%{opacity:0}50%{opacity:0.6}52%,100%{opacity:0}
+  }
+  @keyframes lighthouseSweep{
+    0%{transform:rotate(-18deg)}100%{transform:rotate(18deg)}
+  }
+  @keyframes boatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  @keyframes boatSail{0%{transform:translateX(-40px)}100%{transform:translateX(320px)}}
+  @keyframes fogdrift{0%{transform:translateX(-200px);opacity:0}20%{opacity:0.18}80%{opacity:0.18}100%{transform:translateX(1100px);opacity:0}}
+  @keyframes fogdrift2{0%{transform:translateX(-300px);opacity:0}20%{opacity:0.12}80%{opacity:0.12}100%{transform:translateX(1100px);opacity:0}}
+  @keyframes auroraShift{
+    0%{stop-color:#a8d4ee}
+    25%{stop-color:#b8dcf2}
+    50%{stop-color:#d4a8ee}
+    75%{stop-color:#a8eed4}
+    100%{stop-color:#a8d4ee}
+  }
+  @keyframes waveSplash{
+    0%,100%{opacity:0;transform:scale(0.6)}
+    50%{opacity:0.5;transform:scale(1)}
+  }
+  @keyframes iconPop{
+    0%{transform:scale(0);opacity:0}
+    60%{transform:scale(1.15);opacity:1}
+    100%{transform:scale(1);opacity:1}
+  }
+  @keyframes thermoPulse{0%,100%{fill:#ff6b6b}50%{fill:#ff9a9a}}
+  @keyframes dropletWobble{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.12)}}
+  @keyframes compassSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+  @keyframes uvPulse{0%,100%{opacity:0.6}50%{opacity:1}}
+  @keyframes gentleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes ripple{0%{r:0;opacity:0.4}100%{r:18;opacity:0}}
+  @keyframes slideInRight{0%{transform:translateX(40px);opacity:0}100%{transform:translateX(0);opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="card">
+<svg width="100%" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" style="display:block;">
   <defs>
-    <clipPath id="sc"><rect width="680" height="265"/></clipPath>
-    <clipPath id="wc"><rect x="0" y="280" width="680" height="140"/></clipPath>
+    <clipPath id="sc"><rect width="960" height="310"/></clipPath>
+    <clipPath id="wc"><rect x="0" y="360" width="960" height="180"/></clipPath>
+    <!-- Aurora gradient -->
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87c4e8">
+        <animate attributeName="stop-color" values="#87c4e8;#a0b8e8;#87c4e8" dur="12s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="45%" stop-color="#a8d4ee">
+        <animate attributeName="stop-color" values="#a8d4ee;#c4b8f0;#a8eed4;#a8d4ee" dur="20s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#c5e8f6"/>
+    </linearGradient>
+    <!-- Sun radial -->
+    <radialGradient id="sunGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#faea8a" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#f7d460" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f7d460" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Water gradient -->
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d6b7a"/>
+      <stop offset="100%" stop-color="#1e3e4e"/>
+    </linearGradient>
+    <!-- Icon glow filter -->
+    <filter id="iconGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
   </defs>
 
-  <!-- Sky -->
-  <rect width="680" height="420" fill="#a8d4ee"/>
-  <rect width="680" height="210" fill="#c5e8f6"/>
+  <!-- ═══ SKY ═══ -->
+  <rect width="960" height="540" fill="url(#skyGrad)"/>
 
-  <!-- Sun glow -->
-  <circle cx="560" cy="72" r="72" fill="#f7d460" style="animation:glow 3s ease-in-out infinite" opacity="0.2"/>
-  <circle cx="560" cy="72" r="50" fill="#f7d460" style="animation:sunpulse 4s ease-in-out infinite"/>
-  <circle cx="560" cy="72" r="36" fill="#faea8a"/>
+  <!-- Twinkling stars (subtle daytime shimmer) -->
+  <circle cx="120" cy="28" r="1.2" fill="white" style="animation:twinkle 3s ease-in-out infinite"/>
+  <circle cx="260" cy="18" r="1" fill="white" style="animation:twinkle 4s ease-in-out infinite 1s"/>
+  <circle cx="410" cy="32" r="0.8" fill="white" style="animation:twinkle2 3.5s ease-in-out infinite 0.5s"/>
+  <circle cx="530" cy="12" r="1.1" fill="white" style="animation:twinkle 5s ease-in-out infinite 2s"/>
+  <circle cx="680" cy="24" r="0.9" fill="white" style="animation:twinkle2 3.8s ease-in-out infinite 1.5s"/>
+  <circle cx="820" cy="38" r="1" fill="white" style="animation:twinkle 4.5s ease-in-out infinite 0.8s"/>
+  <circle cx="45" cy="42" r="0.7" fill="white" style="animation:twinkle2 3.2s ease-in-out infinite 2.2s"/>
+  <circle cx="740" cy="14" r="1.3" fill="white" style="animation:twinkle 6s ease-in-out infinite 3s"/>
+  <circle cx="900" cy="20" r="0.8" fill="white" style="animation:twinkle2 4.2s ease-in-out infinite 1.8s"/>
+  <circle cx="180" cy="55" r="0.6" fill="white" style="animation:twinkle 3.7s ease-in-out infinite 0.3s"/>
+
+  <!-- ═══ SUN ═══ -->
+  <circle cx="760" cy="88" r="100" fill="url(#sunGlow)" style="animation:glow 3s ease-in-out infinite"/>
+  <circle cx="760" cy="88" r="54" fill="#f7d460" style="animation:sunpulse 4s ease-in-out infinite"/>
+  <circle cx="760" cy="88" r="40" fill="#faea8a"/>
+  <!-- Sun face — subtle smile -->
+  <circle cx="750" cy="83" r="3" fill="#e8c030" opacity="0.5"/>
+  <circle cx="770" cy="83" r="3" fill="#e8c030" opacity="0.5"/>
+  <path d="M748 96 Q760 103 772 96" fill="none" stroke="#e8c030" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
 
   <!-- Sun rays -->
-  <g style="transform-origin:560px 72px;animation:sunray 4s ease-in-out infinite">
-    <line x1="560" y1="10" x2="560" y2="22" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="560" y1="122" x2="560" y2="134" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="498" y1="72" x2="510" y2="72" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="610" y1="72" x2="622" y2="72" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="516" y1="28" x2="525" y2="37" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="595" y1="107" x2="604" y2="116" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="604" y1="28" x2="595" y2="37" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
-    <line x1="525" y1="107" x2="516" y2="116" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
+  <g style="transform-origin:760px 88px;animation:sunray 4s ease-in-out infinite">
+    <line x1="760" y1="18" x2="760" y2="32" stroke="#f7d460" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="760" y1="144" x2="760" y2="158" stroke="#f7d460" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="690" y1="88" x2="704" y2="88" stroke="#f7d460" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="816" y1="88" x2="830" y2="88" stroke="#f7d460" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="710" y1="38" x2="720" y2="48" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
+    <line x1="800" y1="128" x2="810" y2="138" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
+    <line x1="810" y1="38" x2="800" y2="48" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
+    <line x1="720" y1="128" x2="710" y2="138" stroke="#f7d460" stroke-width="2" stroke-linecap="round"/>
+    <!-- Extra diagonal rays -->
+    <line x1="726" y1="56" x2="732" y2="63" stroke="#f7d460" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="794" y1="56" x2="788" y2="63" stroke="#f7d460" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="726" y1="120" x2="732" y2="113" stroke="#f7d460" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="794" y1="120" x2="788" y2="113" stroke="#f7d460" stroke-width="1.5" stroke-linecap="round"/>
   </g>
 
-  <!-- Clouds -->
+  <!-- ═══ CLOUDS ═══ -->
   <g clip-path="url(#sc)">
-    <g style="animation:drift1 20s linear infinite">
+    <g style="animation:drift1 22s linear infinite">
       <g style="animation:cloudgrow 6s ease-in-out infinite">
-        <ellipse cx="110" cy="60" rx="75" ry="24" fill="white" opacity="0.74"/>
-        <ellipse cx="155" cy="50" rx="55" ry="20" fill="white" opacity="0.62"/>
-        <ellipse cx="75" cy="68" rx="44" ry="17" fill="white" opacity="0.56"/>
+        <ellipse cx="130" cy="70" rx="85" ry="28" fill="white" opacity="0.76"/>
+        <ellipse cx="180" cy="58" rx="62" ry="24" fill="white" opacity="0.64"/>
+        <ellipse cx="88" cy="78" rx="50" ry="20" fill="white" opacity="0.58"/>
       </g>
-      <ellipse cx="790" cy="78" rx="62" ry="21" fill="white" opacity="0.5"/>
-      <ellipse cx="830" cy="68" rx="42" ry="16" fill="white" opacity="0.42"/>
+      <ellipse cx="1020" cy="90" rx="70" ry="24" fill="white" opacity="0.52"/>
+      <ellipse cx="1065" cy="78" rx="48" ry="18" fill="white" opacity="0.44"/>
     </g>
-    <g style="animation:drift2 26s linear infinite">
-      <ellipse cx="350" cy="44" rx="60" ry="19" fill="white" opacity="0.52"/>
-      <ellipse cx="395" cy="36" rx="42" ry="15" fill="white" opacity="0.44"/>
-      <ellipse cx="920" cy="56" rx="72" ry="23" fill="white" opacity="0.5"/>
+    <g style="animation:drift2 28s linear infinite">
+      <g style="animation:cloudgrow 8s ease-in-out infinite 2s">
+        <ellipse cx="420" cy="52" rx="68" ry="22" fill="white" opacity="0.54"/>
+        <ellipse cx="470" cy="42" rx="48" ry="17" fill="white" opacity="0.46"/>
+      </g>
+      <ellipse cx="1120" cy="64" rx="80" ry="26" fill="white" opacity="0.52"/>
     </g>
-    <g style="animation:drift3 34s linear infinite">
-      <ellipse cx="510" cy="66" rx="50" ry="17" fill="white" opacity="0.4"/>
-      <ellipse cx="1080" cy="46" rx="58" ry="18" fill="white" opacity="0.36"/>
+    <g style="animation:drift3 36s linear infinite">
+      <ellipse cx="640" cy="76" rx="56" ry="19" fill="white" opacity="0.42"/>
+      <ellipse cx="1360" cy="52" rx="64" ry="20" fill="white" opacity="0.38"/>
     </g>
   </g>
 
-  <!-- Wind lines — looping throughout -->
-  <line x1="28" y1="114" x2="158" y2="114" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="130 130" style="animation:windline1 2.4s ease-in-out infinite"/>
-  <line x1="14" y1="130" x2="118" y2="130" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="104 104" style="animation:windline1 2.4s ease-in-out infinite 0.5s"/>
-  <line x1="36" y1="146" x2="156" y2="146" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="120 120" style="animation:windline2 2.4s ease-in-out infinite 0.9s"/>
-  <line x1="50" y1="162" x2="140" y2="162" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="90 90" style="animation:windline2 2.4s ease-in-out infinite 1.3s"/>
+  <!-- ═══ FOG / MIST layers ═══ -->
+  <ellipse cx="0" cy="290" rx="400" ry="14" fill="white" opacity="0" style="animation:fogdrift 30s ease-in-out infinite;animation-delay:12s"/>
+  <ellipse cx="0" cy="305" rx="500" ry="10" fill="white" opacity="0" style="animation:fogdrift2 40s ease-in-out infinite;animation-delay:18s"/>
+  <ellipse cx="0" cy="280" rx="350" ry="12" fill="white" opacity="0" style="animation:fogdrift 35s ease-in-out infinite;animation-delay:25s"/>
 
-  <!-- Birds — appear ~5s, fly across -->
-  <g style="animation:birdflight 8s ease-in-out both;animation-delay:5s;opacity:0">
+  <!-- ═══ WIND LINES ═══ -->
+  <line x1="40" y1="130" x2="190" y2="130" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="150 150" style="animation:windline1 2.4s ease-in-out infinite"/>
+  <line x1="20" y1="150" x2="140" y2="150" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="120 120" style="animation:windline1 2.4s ease-in-out infinite 0.5s"/>
+  <line x1="50" y1="170" x2="186" y2="170" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="136 136" style="animation:windline2 2.4s ease-in-out infinite 0.9s"/>
+  <line x1="66" y1="190" x2="170" y2="190" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="104 104" style="animation:windline2 2.4s ease-in-out infinite 1.3s"/>
+  <line x1="30" y1="208" x2="120" y2="208" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="90 90" style="animation:windline1 2.8s ease-in-out infinite 1.8s"/>
+
+  <!-- ═══ BIRDS — flock 1 at ~5s ═══ -->
+  <g style="animation:birdflight 9s ease-in-out both;animation-delay:5s;opacity:0" transform="translate(0,110)">
     <path d="M0 4 Q4 0 8 4 Q12 0 16 4" fill="none" stroke="#2a6080" stroke-width="1.5" stroke-linecap="round" style="animation:birdwing 0.4s ease-in-out infinite"/>
-    <path d="M22 6 Q26 2 30 6 Q34 2 38 6" fill="none" stroke="#2a6080" stroke-width="1.5" stroke-linecap="round" style="animation:birdwing 0.4s ease-in-out infinite 0.2s"/>
-    <path d="M44 3 Q48 -1 52 3 Q56 -1 60 3" fill="none" stroke="#2a6080" stroke-width="1.2" stroke-linecap="round" style="animation:birdwing 0.4s ease-in-out infinite 0.1s"/>
+    <path d="M24 7 Q28 3 32 7 Q36 3 40 7" fill="none" stroke="#2a6080" stroke-width="1.5" stroke-linecap="round" style="animation:birdwing 0.4s ease-in-out infinite 0.2s"/>
+    <path d="M48 3 Q52 -1 56 3 Q60 -1 64 3" fill="none" stroke="#2a6080" stroke-width="1.2" stroke-linecap="round" style="animation:birdwing 0.4s ease-in-out infinite 0.1s"/>
   </g>
 
-  <!-- Plane — appears ~20s -->
-  <g style="animation:planeflight 6s ease-in-out both;animation-delay:20s;opacity:0">
-    <rect x="-28" y="-5" width="28" height="6" fill="#e8f4fa" rx="3"/>
-    <path d="M-14 -5 L-6 -12 L2 -5" fill="#d0e8f5" stroke="none"/>
-    <path d="M-26 1 L-34 6 L-18 1" fill="#d0e8f5" stroke="none"/>
-    <rect x="-40" y="-3" width="12" height="3" fill="#c8e0f0" rx="1.5" style="animation:exhaustpuff 0.6s ease-out infinite"/>
+  <!-- ═══ BIRDS — flock 2 at ~28s ═══ -->
+  <g style="animation:birdflight2 11s ease-in-out both;animation-delay:28s;opacity:0" transform="translate(0,85)">
+    <path d="M0 4 Q4 0 8 4 Q12 0 16 4" fill="none" stroke="#1e5570" stroke-width="1.3" stroke-linecap="round" style="animation:birdwing 0.35s ease-in-out infinite"/>
+    <path d="M20 7 Q24 3 28 7 Q32 3 36 7" fill="none" stroke="#1e5570" stroke-width="1.3" stroke-linecap="round" style="animation:birdwing 0.35s ease-in-out infinite 0.15s"/>
+    <path d="M-8 10 Q-4 6 0 10 Q4 6 8 10" fill="none" stroke="#1e5570" stroke-width="1" stroke-linecap="round" style="animation:birdwing 0.38s ease-in-out infinite 0.25s"/>
+    <path d="M42 2 Q46 -2 50 2 Q54 -2 58 2" fill="none" stroke="#1e5570" stroke-width="1.1" stroke-linecap="round" style="animation:birdwing 0.42s ease-in-out infinite 0.1s"/>
   </g>
 
-  <!-- Skyline -->
-  <rect x="0" y="252" width="680" height="168" fill="#3d6b7a"/>
-  <rect x="0" y="326" width="680" height="94" fill="#2a5060"/>
+  <!-- ═══ SHOOTING STAR at ~16s ═══ -->
+  <g style="animation:shootingstar 1.2s ease-out both;animation-delay:16s;opacity:0">
+    <line x1="180" y1="30" x2="160" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="180" y1="30" x2="170" y2="28" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="180" cy="30" r="2" fill="white"/>
+  </g>
+  <!-- Second shooting star at ~42s -->
+  <g style="animation:shootingstar 1s ease-out both;animation-delay:42s;opacity:0" transform="translate(300,-10)">
+    <line x1="180" y1="30" x2="160" y2="22" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="180" cy="30" r="1.5" fill="white"/>
+  </g>
 
-  <rect x="26" y="210" width="42" height="84" fill="#2e5a6a" rx="2"/>
-  <rect x="72" y="194" width="32" height="100" fill="#254e5e" rx="2"/>
-  <rect x="108" y="222" width="52" height="72" fill="#2e5a6a" rx="2"/>
-  <rect x="165" y="184" width="36" height="110" fill="#254e5e" rx="2"/>
-  <rect x="206" y="216" width="46" height="78" fill="#2e5a6a" rx="2"/>
-  <rect x="256" y="200" width="30" height="94" fill="#254e5e" rx="2"/>
-  <rect x="290" y="226" width="56" height="68" fill="#2e5a6a" rx="2"/>
-  <rect x="350" y="190" width="33" height="104" fill="#254e5e" rx="2"/>
-  <rect x="387" y="212" width="50" height="82" fill="#2e5a6a" rx="2"/>
-  <rect x="441" y="202" width="31" height="92" fill="#254e5e" rx="2"/>
-  <rect x="476" y="220" width="44" height="74" fill="#2e5a6a" rx="2"/>
-  <rect x="524" y="185" width="38" height="109" fill="#254e5e" rx="2"/>
-  <rect x="566" y="209" width="52" height="85" fill="#2e5a6a" rx="2"/>
-  <rect x="622" y="196" width="40" height="98" fill="#254e5e" rx="2"/>
+  <!-- ═══ PLANE at ~22s ═══ -->
+  <g style="animation:planeflight 7s ease-in-out both;animation-delay:22s;opacity:0">
+    <rect x="-30" y="-5" width="30" height="7" fill="#e8f4fa" rx="3.5"/>
+    <path d="M-16 -5 L-6 -14 L4 -5" fill="#d0e8f5" stroke="none"/>
+    <path d="M-28 2 L-38 8 L-20 2" fill="#d0e8f5" stroke="none"/>
+    <rect x="-44" y="-3" width="14" height="3.5" fill="#c8e0f0" rx="1.5" style="animation:exhaustpuff 0.6s ease-out infinite"/>
+  </g>
 
-  <!-- Windows blinking -->
-  <rect x="34" y="222" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.1s ease-in-out infinite"/>
-  <rect x="48" y="222" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.1s ease-in-out infinite 0.7s"/>
-  <rect x="34" y="236" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.1s ease-in-out infinite 1.4s"/>
-  <rect x="78" y="204" width="7" height="5" fill="#f0e070" rx="1" style="animation:blink 4s ease-in-out infinite 0.3s"/>
-  <rect x="78" y="218" width="7" height="5" fill="#f0e070" rx="1" style="animation:blink 4s ease-in-out infinite 1.1s"/>
-  <rect x="172" y="198" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 2.8s ease-in-out infinite 0.5s"/>
-  <rect x="172" y="213" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 2.8s ease-in-out infinite 1.2s"/>
-  <rect x="357" y="202" width="7" height="5" fill="#f0e070" rx="1" style="animation:blink 3.6s ease-in-out infinite 0.4s"/>
-  <rect x="530" y="198" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.5s ease-in-out infinite 0.9s"/>
-  <rect x="530" y="213" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.5s ease-in-out infinite 1.8s"/>
-  <rect x="630" y="208" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 2.6s ease-in-out infinite 0.6s"/>
+  <!-- ═══ SKYLINE ═══ -->
+  <rect x="0" y="310" width="960" height="230" fill="url(#waterGrad)"/>
+  <rect x="0" y="390" width="960" height="150" fill="#1e3e4e"/>
 
-  <!-- Water shimmer -->
+  <!-- Buildings -->
+  <rect x="20" y="254" width="50" height="100" fill="#2e5a6a" rx="2"/>
+  <rect x="74" y="236" width="38" height="118" fill="#254e5e" rx="2"/>
+  <rect x="116" y="268" width="60" height="86" fill="#2e5a6a" rx="2"/>
+  <rect x="182" y="224" width="42" height="130" fill="#254e5e" rx="2"/>
+  <rect x="230" y="260" width="54" height="94" fill="#2e5a6a" rx="2"/>
+  <rect x="290" y="242" width="36" height="112" fill="#254e5e" rx="2"/>
+  <rect x="332" y="272" width="64" height="82" fill="#2e5a6a" rx="2"/>
+  <rect x="402" y="232" width="40" height="122" fill="#254e5e" rx="2"/>
+  <rect x="448" y="258" width="58" height="96" fill="#2e5a6a" rx="2"/>
+  <rect x="512" y="248" width="36" height="106" fill="#254e5e" rx="2"/>
+  <rect x="554" y="266" width="52" height="88" fill="#2e5a6a" rx="2"/>
+  <rect x="612" y="226" width="44" height="128" fill="#254e5e" rx="2"/>
+  <rect x="662" y="252" width="60" height="102" fill="#2e5a6a" rx="2"/>
+  <rect x="728" y="240" width="38" height="114" fill="#254e5e" rx="2"/>
+  <rect x="772" y="264" width="50" height="90" fill="#2e5a6a" rx="2"/>
+  <rect x="828" y="248" width="42" height="106" fill="#254e5e" rx="2"/>
+  <rect x="876" y="270" width="64" height="84" fill="#2e5a6a" rx="2"/>
+
+  <!-- Antenna on tallest building -->
+  <line x1="203" y1="224" x2="203" y2="208" stroke="#3a7a8a" stroke-width="1.5"/>
+  <circle cx="203" cy="206" r="2" fill="#ff4444" style="animation:blink 1.5s ease-in-out infinite"/>
+
+  <!-- ═══ WINDOWS (blinking) ═══ -->
+  <rect x="32" y="268" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3.1s ease-in-out infinite"/>
+  <rect x="48" y="268" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3.1s ease-in-out infinite 0.7s"/>
+  <rect x="32" y="284" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3.1s ease-in-out infinite 1.4s"/>
+  <rect x="48" y="284" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 4s ease-in-out infinite 2.1s"/>
+  <rect x="82" y="248" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 4s ease-in-out infinite 0.3s"/>
+  <rect x="82" y="264" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 4s ease-in-out infinite 1.1s"/>
+  <rect x="82" y="280" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.5s ease-in-out infinite 1.9s"/>
+  <rect x="190" y="238" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 2.8s ease-in-out infinite 0.5s"/>
+  <rect x="190" y="256" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 2.8s ease-in-out infinite 1.2s"/>
+  <rect x="190" y="274" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3.2s ease-in-out infinite 2s"/>
+  <rect x="410" y="246" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.6s ease-in-out infinite 0.4s"/>
+  <rect x="410" y="262" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.6s ease-in-out infinite 1.6s"/>
+  <rect x="620" y="240" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3.5s ease-in-out infinite 0.9s"/>
+  <rect x="620" y="258" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3.5s ease-in-out infinite 1.8s"/>
+  <rect x="620" y="276" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 2.6s ease-in-out infinite 0.6s"/>
+  <rect x="736" y="254" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.3s ease-in-out infinite 0.2s"/>
+  <rect x="736" y="270" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 3.3s ease-in-out infinite 1.4s"/>
+  <rect x="836" y="262" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 4.2s ease-in-out infinite 0.8s"/>
+  <rect x="836" y="278" width="8" height="6" fill="#f0e070" rx="1" style="animation:blink 4.2s ease-in-out infinite 2.4s"/>
+  <rect x="890" y="284" width="9" height="7" fill="#f0e070" rx="1" style="animation:blink 3s ease-in-out infinite 1s"/>
+
+  <!-- ═══ LIGHTHOUSE (right side) ═══ -->
+  <g transform="translate(910,270)">
+    <rect x="-6" y="0" width="12" height="42" fill="#4a2020" rx="1"/>
+    <rect x="-9" y="-4" width="18" height="8" fill="#5a3030" rx="2"/>
+    <rect x="-4" y="-6" width="8" height="4" fill="#ffeebb" rx="1" opacity="0.9"/>
+    <!-- Lighthouse beam -->
+    <g style="transform-origin:0px -4px;animation:lighthouseSweep 4s ease-in-out infinite alternate">
+      <polygon points="0,-4 -60,30 60,30" fill="#ffeebb" opacity="0" style="animation:lighthouse 4s linear infinite"/>
+    </g>
+  </g>
+
+  <!-- ═══ BOAT on water ═══ -->
+  <g style="animation:boatSail 25s linear infinite;animation-delay:10s" transform="translate(0,0)">
+    <g style="animation:boatBob 2s ease-in-out infinite">
+      <path d="M100,408 L108,420 L132,420 L140,408 Z" fill="#5a3030"/>
+      <line x1="120" y1="408" x2="120" y2="390" stroke="#6a4040" stroke-width="1.5"/>
+      <path d="M120,392 L120,406 L134,406" fill="#e8d8c8" opacity="0.8"/>
+    </g>
+  </g>
+
+  <!-- ═══ WATER SHIMMER ═══ -->
   <g clip-path="url(#wc)" style="animation:wavemove 3s linear infinite">
-    <ellipse cx="80" cy="370" rx="60" ry="5" fill="#5aaac8" opacity="0.25" style="animation:shimmer 2s ease-in-out infinite"/>
-    <ellipse cx="240" cy="378" rx="80" ry="5" fill="#5aaac8" opacity="0.2" style="animation:shimmer 2s ease-in-out infinite 0.5s"/>
-    <ellipse cx="430" cy="365" rx="70" ry="5" fill="#5aaac8" opacity="0.22" style="animation:shimmer 2s ease-in-out infinite 1s"/>
-    <ellipse cx="600" cy="374" rx="55" ry="5" fill="#5aaac8" opacity="0.18" style="animation:shimmer 2s ease-in-out infinite 1.5s"/>
-    <ellipse cx="760" cy="370" rx="65" ry="5" fill="#5aaac8" opacity="0.2"/>
+    <ellipse cx="100" cy="430" rx="70" ry="5" fill="#5aaac8" opacity="0.25" style="animation:shimmer 2s ease-in-out infinite"/>
+    <ellipse cx="300" cy="440" rx="90" ry="5" fill="#5aaac8" opacity="0.2" style="animation:shimmer 2s ease-in-out infinite 0.5s"/>
+    <ellipse cx="520" cy="425" rx="80" ry="5" fill="#5aaac8" opacity="0.22" style="animation:shimmer 2s ease-in-out infinite 1s"/>
+    <ellipse cx="740" cy="435" rx="65" ry="5" fill="#5aaac8" opacity="0.18" style="animation:shimmer 2s ease-in-out infinite 1.5s"/>
+    <ellipse cx="920" cy="430" rx="75" ry="5" fill="#5aaac8" opacity="0.2"/>
+    <ellipse cx="180" cy="450" rx="55" ry="4" fill="#5aaac8" opacity="0.15" style="animation:shimmer 2.5s ease-in-out infinite 0.8s"/>
+    <ellipse cx="620" cy="455" rx="60" ry="4" fill="#5aaac8" opacity="0.14" style="animation:shimmer 2.5s ease-in-out infinite 1.2s"/>
   </g>
 
-  <!-- Rain drops — appear ~35s for a moment -->
+  <!-- Water ripples -->
+  <circle cx="200" cy="420" r="0" fill="none" stroke="#7bbdd4" stroke-width="0.8" style="animation:ripple 3s ease-out infinite"/>
+  <circle cx="500" cy="430" r="0" fill="none" stroke="#7bbdd4" stroke-width="0.8" style="animation:ripple 3s ease-out infinite 1s"/>
+  <circle cx="780" cy="418" r="0" fill="none" stroke="#7bbdd4" stroke-width="0.8" style="animation:ripple 3s ease-out infinite 2s"/>
+
+  <!-- Wave splash particles -->
+  <circle cx="350" cy="395" r="2" fill="white" opacity="0" style="animation:waveSplash 4s ease-in-out infinite"/>
+  <circle cx="354" cy="392" r="1.5" fill="white" opacity="0" style="animation:waveSplash 4s ease-in-out infinite 0.3s"/>
+  <circle cx="650" cy="398" r="1.8" fill="white" opacity="0" style="animation:waveSplash 5s ease-in-out infinite 1.5s"/>
+
+  <!-- ═══ RAIN DROPS — appear ~35s ═══ -->
   <g style="opacity:0;animation:fadeup 1s ease-out both;animation-delay:35s">
-    <line x1="200" y1="155" x2="196" y2="175" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35s"/>
-    <line x1="230" y1="148" x2="226" y2="168" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.2s"/>
-    <line x1="260" y1="158" x2="256" y2="178" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.4s"/>
-    <line x1="285" y1="145" x2="281" y2="165" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.6s"/>
-    <line x1="215" y1="168" x2="211" y2="188" stroke="#7bbdd4" stroke-width="1.2" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.3s"/>
+    <line x1="280" y1="175" x2="276" y2="200" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35s"/>
+    <line x1="315" y1="168" x2="311" y2="193" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.2s"/>
+    <line x1="350" y1="178" x2="346" y2="203" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.4s"/>
+    <line x1="380" y1="165" x2="376" y2="190" stroke="#7bbdd4" stroke-width="1.5" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.6s"/>
+    <line x1="298" y1="188" x2="294" y2="213" stroke="#7bbdd4" stroke-width="1.2" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.3s"/>
+    <line x1="332" y1="182" x2="328" y2="207" stroke="#7bbdd4" stroke-width="1.2" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.5s"/>
+    <line x1="365" y1="172" x2="361" y2="197" stroke="#7bbdd4" stroke-width="1" stroke-linecap="round" style="animation:raindrop 1.2s ease-in infinite 35.7s"/>
   </g>
 
-  <!-- VIENTO popup — at 7s -->
-  <rect x="22" y="300" width="200" height="108" fill="#122a38" rx="10" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:7s"/>
-  <text x="42" y="326" font-family="sans-serif" font-size="12" font-weight="500" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.15s">Viento sur</text>
-  <text x="42" y="360" font-family="sans-serif" font-size="26" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.2s">16–35 km/h</text>
-  <text x="42" y="392" font-family="sans-serif" font-size="11" fill="#6deaaa" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.3s">6% lluvia · Sin paraguas</text>
 
-  <!-- HUMEDAD popup — at 9.5s -->
-  <rect x="238" y="300" width="160" height="108" fill="#122a38" rx="10" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:9.5s"/>
-  <text x="258" y="326" font-family="sans-serif" font-size="12" font-weight="500" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.65s">Humedad</text>
-  <text x="258" y="368" font-family="sans-serif" font-size="34" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.7s">79%</text>
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ═══ WEATHER INFO POPUPS WITH ICONS ═══ -->
+  <!-- ══════════════════════════════════════════════ -->
 
-  <!-- TEMPERATURA popup — at 15s -->
-  <rect x="414" y="300" width="244" height="108" fill="#122a38" rx="10" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:15s"/>
-  <text x="434" y="326" font-family="sans-serif" font-size="12" font-weight="500" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:15.15s">Lima, Perú</text>
-  <text x="434" y="374" font-family="sans-serif" font-size="46" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:15.2s">20°C</text>
-  <text x="556" y="362" font-family="sans-serif" font-size="11" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:15.25s">sensación</text>
-  <text x="556" y="376" font-family="sans-serif" font-size="11" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:15.25s">térmica</text>
-  <text x="434" y="398" font-family="sans-serif" font-size="11" fill="#c0e4f5" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:15.35s">Parcialmente nublado · Despejando</text>
+  <!-- ─── VIENTO (Wind) popup — at 7s ─── -->
+  <g>
+    <rect x="28" y="370" width="220" height="130" fill="#122a38" rx="12" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:7s"/>
 
-  <!-- FORECAST BAR — at 50s -->
-  <rect x="22" y="164" width="636" height="50" fill="#122a38" rx="8" opacity="0" style="animation:popupin 0.9s cubic-bezier(0.22,1,0.36,1) both;animation-delay:50s"/>
-  <text x="42" y="184" font-family="sans-serif" font-size="11" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:50.15s">Próximas horas</text>
-  <text x="42" y="202" font-family="sans-serif" font-size="13" font-weight="500" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:50.2s">Cielo despejándose · Viento amainando · 20–22°C</text>
+    <!-- Wind icon (compass/arrow) -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:7.1s" filter="url(#iconGlow)">
+      <circle cx="68" cy="404" r="16" fill="none" stroke="#4ecdc4" stroke-width="1.5" opacity="0.5"/>
+      <g style="transform-origin:68px 404px">
+        <!-- Compass arrow pointing south -->
+        <polygon points="68,390 63,408 68,404 73,408" fill="#4ecdc4" opacity="0.9"/>
+        <polygon points="68,418 63,400 68,404 73,400" fill="#2a8a82" opacity="0.7"/>
+      </g>
+      <text x="68" y="408" font-family="sans-serif" font-size="6" fill="white" text-anchor="middle" opacity="0.5">S</text>
+    </g>
+
+    <text x="96" y="400" font-family="sans-serif" font-size="13" font-weight="500" fill="#4ecdc4" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.15s">Viento sur</text>
+    <text x="52" y="440" font-family="sans-serif" font-size="30" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.2s">16–35 km/h</text>
+    <!-- Mini wind visualization -->
+    <line x1="52" y1="458" x2="130" y2="458" stroke="#4ecdc4" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="78 78" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.3s"/>
+    <line x1="62" y1="466" x2="115" y2="466" stroke="#4ecdc4" stroke-width="1" stroke-linecap="round" stroke-dasharray="53 53" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.35s"/>
+    <text x="52" y="488" font-family="sans-serif" font-size="11" fill="#6deaaa" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:7.4s">6% lluvia · Sin paraguas</text>
+  </g>
+
+  <!-- ─── HUMEDAD (Humidity) popup — at 9.5s ─── -->
+  <g>
+    <rect x="268" y="370" width="190" height="130" fill="#122a38" rx="12" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:9.5s"/>
+
+    <!-- Droplet icon -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:9.6s;transform-origin:308px 406px;animation:dropletWobble 2s ease-in-out infinite" filter="url(#iconGlow)">
+      <path d="M308,388 Q298,404 298,410 Q298,418 308,418 Q318,418 318,410 Q318,404 308,388 Z" fill="#5b9bd5" opacity="0.85"/>
+      <ellipse cx="304" cy="406" rx="3" ry="4" fill="white" opacity="0.3"/>
+    </g>
+
+    <text x="330" y="400" font-family="sans-serif" font-size="13" font-weight="500" fill="#5b9bd5" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.65s">Humedad</text>
+    <text x="296" y="448" font-family="sans-serif" font-size="40" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.7s">79%</text>
+    <!-- Humidity bar -->
+    <rect x="296" y="464" width="130" height="5" rx="3" fill="#1a3848" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.8s"/>
+    <rect x="296" y="464" width="103" height="5" rx="3" fill="#5b9bd5" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.85s"/>
+    <text x="296" y="486" font-family="sans-serif" font-size="10" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:9.9s">Punto de rocío: 16°C</text>
+  </g>
+
+  <!-- ─── TEMPERATURA popup — at 15s ─── -->
+  <g>
+    <rect x="478" y="370" width="280" height="130" fill="#122a38" rx="12" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:13s"/>
+
+    <!-- Sun + Cloud weather icon -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:13.1s" filter="url(#iconGlow)">
+      <!-- Mini sun -->
+      <circle cx="512" cy="392" r="10" fill="#f7d460" opacity="0.9"/>
+      <circle cx="512" cy="392" r="7" fill="#faea8a"/>
+      <!-- Mini cloud overlay -->
+      <ellipse cx="522" cy="400" rx="16" ry="8" fill="white" opacity="0.85"/>
+      <ellipse cx="515" cy="403" rx="10" ry="6" fill="white" opacity="0.7"/>
+      <ellipse cx="528" cy="402" rx="8" ry="5" fill="white" opacity="0.6"/>
+    </g>
+
+    <!-- Thermometer icon -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:13.15s" transform="translate(498,418)">
+      <rect x="0" y="0" width="6" height="22" rx="3" fill="#2a5a6a"/>
+      <circle cx="3" cy="26" r="6" fill="#2a5a6a"/>
+      <rect x="1.5" y="8" width="3" height="14" rx="1.5" fill="#ff6b6b" style="animation:thermoPulse 2s ease-in-out infinite"/>
+      <circle cx="3" cy="26" r="4" fill="#ff6b6b" style="animation:thermoPulse 2s ease-in-out infinite"/>
+    </g>
+
+    <text x="542" y="398" font-family="sans-serif" font-size="13" font-weight="500" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:13.2s">Lima, Perú</text>
+    <text x="518" y="448" font-family="sans-serif" font-size="50" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:13.25s">20°C</text>
+    <text x="660" y="432" font-family="sans-serif" font-size="11" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:13.3s">sensación</text>
+    <text x="660" y="448" font-family="sans-serif" font-size="11" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:13.3s">térmica</text>
+    <text x="518" y="480" font-family="sans-serif" font-size="11" fill="#c0e4f5" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:13.4s">Parcialmente nublado · Despejando</text>
+
+    <!-- UV index badge -->
+    <g style="opacity:0;animation:floatin 0.6s ease-out both;animation-delay:13.5s">
+      <rect x="700" y="462" width="44" height="22" rx="6" fill="#e8a030" opacity="0.2"/>
+      <text x="710" y="478" font-family="sans-serif" font-size="10" font-weight="600" fill="#e8a030" style="animation:uvPulse 2s ease-in-out infinite">UV 4</text>
+    </g>
+  </g>
+
+  <!-- ─── FORECAST BAR — at 40s ─── -->
+  <g>
+    <rect x="28" y="192" width="900" height="68" fill="#122a38" rx="10" opacity="0" style="animation:popupin 0.9s cubic-bezier(0.22,1,0.36,1) both;animation-delay:40s"/>
+    <text x="52" y="216" font-family="sans-serif" font-size="12" fill="#8ecde8" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:40.15s">Próximas horas</text>
+    <text x="52" y="240" font-family="sans-serif" font-size="14" font-weight="500" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:40.2s">Cielo despejándose · Viento amainando · 20–22°C</text>
+
+    <!-- Mini forecast icons in the bar -->
+    <!-- 14:00 - partly cloudy -->
+    <g style="opacity:0;animation:floatin 0.6s ease-out both;animation-delay:40.3s">
+      <text x="590" y="215" font-family="sans-serif" font-size="9" fill="#8ecde8">14:00</text>
+      <circle cx="596" cy="228" r="6" fill="#f7d460" opacity="0.8"/>
+      <ellipse cx="601" cy="232" rx="9" ry="5" fill="white" opacity="0.7"/>
+      <text x="590" y="248" font-family="sans-serif" font-size="10" font-weight="500" fill="white">21°</text>
+    </g>
+    <!-- 16:00 - sun -->
+    <g style="opacity:0;animation:floatin 0.6s ease-out both;animation-delay:40.4s">
+      <text x="660" y="215" font-family="sans-serif" font-size="9" fill="#8ecde8">16:00</text>
+      <circle cx="672" cy="230" r="8" fill="#f7d460" opacity="0.85"/>
+      <circle cx="672" cy="230" r="5.5" fill="#faea8a"/>
+      <text x="664" y="248" font-family="sans-serif" font-size="10" font-weight="500" fill="white">22°</text>
+    </g>
+    <!-- 18:00 - cloudy -->
+    <g style="opacity:0;animation:floatin 0.6s ease-out both;animation-delay:40.5s">
+      <text x="730" y="215" font-family="sans-serif" font-size="9" fill="#8ecde8">18:00</text>
+      <ellipse cx="742" cy="230" rx="12" ry="6" fill="white" opacity="0.7"/>
+      <ellipse cx="736" cy="233" rx="8" ry="4" fill="white" opacity="0.55"/>
+      <text x="732" y="248" font-family="sans-serif" font-size="10" font-weight="500" fill="white">20°</text>
+    </g>
+    <!-- 20:00 - clear night -->
+    <g style="opacity:0;animation:floatin 0.6s ease-out both;animation-delay:40.6s">
+      <text x="800" y="215" font-family="sans-serif" font-size="9" fill="#8ecde8">20:00</text>
+      <circle cx="812" cy="228" r="7" fill="none" stroke="#c0d8f0" stroke-width="1.5"/>
+      <circle cx="816" cy="225" r="7" fill="#122a38"/>
+      <text x="802" y="248" font-family="sans-serif" font-size="10" font-weight="500" fill="white">19°</text>
+    </g>
+    <!-- 22:00 - clear night -->
+    <g style="opacity:0;animation:floatin 0.6s ease-out both;animation-delay:40.7s">
+      <text x="866" y="215" font-family="sans-serif" font-size="9" fill="#8ecde8">22:00</text>
+      <circle cx="878" cy="228" r="7" fill="none" stroke="#c0d8f0" stroke-width="1.5"/>
+      <circle cx="882" cy="225" r="7" fill="#122a38"/>
+      <circle cx="872" cy="222" r="1" fill="#c0d8f0" opacity="0.6"/>
+      <text x="870" y="248" font-family="sans-serif" font-size="10" font-weight="500" fill="white">18°</text>
+    </g>
+  </g>
+
+  <!-- ─── SUNRISE/SUNSET info — at 45s ─── -->
+  <g>
+    <rect x="28" y="278" width="260" height="72" fill="#122a38" rx="10" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:45s"/>
+    <!-- Sunrise icon -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:45.1s">
+      <line x1="50" y1="320" x2="90" y2="320" stroke="#f0c040" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M60,320 Q70,300 80,320" fill="none" stroke="#f0c040" stroke-width="1.5"/>
+      <line x1="70" y1="304" x2="70" y2="298" stroke="#f0c040" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="58" y1="308" x2="55" y2="304" stroke="#f0c040" stroke-width="1" stroke-linecap="round"/>
+      <line x1="82" y1="308" x2="85" y2="304" stroke="#f0c040" stroke-width="1" stroke-linecap="round"/>
+      <!-- Arrow up -->
+      <polygon points="70,298 67,302 73,302" fill="#f0c040"/>
+    </g>
+    <text x="100" y="308" font-family="sans-serif" font-size="10" fill="#f0c040" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:45.15s">Amanecer</text>
+    <text x="100" y="326" font-family="sans-serif" font-size="18" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:45.2s">06:18</text>
+    <!-- Sunset -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:45.25s">
+      <line x1="176" y1="320" x2="216" y2="320" stroke="#e07030" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M186,320 Q196,300 206,320" fill="none" stroke="#e07030" stroke-width="1.5"/>
+      <line x1="196" y1="310" x2="196" y2="316" stroke="#e07030" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Arrow down -->
+      <polygon points="196,316 193,312 199,312" fill="#e07030"/>
+    </g>
+    <text x="224" y="308" font-family="sans-serif" font-size="10" fill="#e07030" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:45.3s">Atardecer</text>
+    <text x="224" y="326" font-family="sans-serif" font-size="18" font-weight="300" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:45.35s">17:42</text>
+  </g>
+
+  <!-- ─── AQI (Air Quality) badge — at 48s ─── -->
+  <g>
+    <rect x="308" y="278" width="150" height="72" fill="#122a38" rx="10" opacity="0" style="animation:popupin 0.8s cubic-bezier(0.22,1,0.36,1) both;animation-delay:48s"/>
+    <!-- Leaf/air icon -->
+    <g style="opacity:0;animation:iconPop 0.5s ease-out both;animation-delay:48.1s;animation:gentleFloat 3s ease-in-out infinite">
+      <path d="M338,300 Q348,286 358,300 Q348,296 338,300 Z" fill="#6deaaa" opacity="0.7"/>
+      <line x1="348" y1="296" x2="348" y2="310" stroke="#6deaaa" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+    </g>
+    <text x="334" y="328" font-family="sans-serif" font-size="10" fill="#6deaaa" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:48.15s">Calidad del aire</text>
+    <text x="334" y="344" font-family="sans-serif" font-size="16" font-weight="500" fill="white" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:48.2s">AQI 42</text>
+    <text x="404" y="344" font-family="sans-serif" font-size="10" fill="#6deaaa" opacity="0" style="animation:floatin 0.6s ease-out both;animation-delay:48.25s">Buena</text>
+  </g>
 
 </svg>
 </div>
+
+</body>
+</html>
